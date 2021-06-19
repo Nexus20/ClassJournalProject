@@ -8,9 +8,19 @@ using ClassJournalProject.Models;
 namespace ClassJournalProject.Data {
     public class ApplicationDbContext : IdentityDbContext {
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options) {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
+        public DbSet<Specialty> Specialties { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<StudentAttendance> StudentAttendance { get; set; }
+        public DbSet<StudentStatus> StudentStatuses { get; set; }
+        public DbSet<StudentEducationLevel> StudentEducationLevels { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<SpecialtySubjectAssignment> SpecialtySubjectAssignments { get; set; }
+        public DbSet<TeacherSubjectAssignment> TeacherSubjectAssignments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
 

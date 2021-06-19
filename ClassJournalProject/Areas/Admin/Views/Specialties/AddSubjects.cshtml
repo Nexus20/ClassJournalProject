@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ClassJournalProject.Models.Subject>
+
+@{
+    ViewData["Title"] = "Adding subjects";
+}
+
+<h1>Adding subjects to the specialty @ViewBag.Specialty.Item1 @ViewBag.Specialty.Item2</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddSubjects">
+            
+            <input type="hidden" name="specialtyId" value="@ViewBag.Specialty.Item1" />
+
+            <div class="form-group">
+
+                @foreach (var subject in Model) {
+                    <input class="form-check-input" id="subject-@subject.Id" type="checkbox" name="subjects" value="@subject.Id"/>
+                    <label class="form-check-label" for="subject-@subject.Id">@subject.Name</label>
+                }
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add selected subjects" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="SubjectsList">Back to subject list</a> | 
+    <a asp-action="SpecialtiesList">Back to specialties list</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
