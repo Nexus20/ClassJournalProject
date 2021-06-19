@@ -77,7 +77,7 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
             if (specialty == null) {
                 return NotFound();
             }
-
+            
             return View(specialty);
         }
 

@@ -10,6 +10,15 @@ namespace ClassJournalProject.Models {
         public Group Group { get; set; }
 
         public ICollection<TeacherSubjectAssignment> TeacherSubjectAssignments { get; set; }
+
+        public enum TeacherRank {
+            SeniorLecturer,
+            Docent,
+            Professor
+        }
+
+        public TeacherRank Rank { get; set; }
+
     }
 
 }

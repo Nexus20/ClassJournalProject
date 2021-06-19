@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+using System.Linq;
+using System.Threading.Tasks;
+using ClassJournalProject.Models;
 
-namespace ClassJournalProject.Models {
+namespace ClassJournalProject.Areas.Admin.Models.ViewModels {
 
-    public class User : IdentityUser {
+    public class CreateTeacherViewModel {
 
         public enum UserSex {
             Male,
@@ -21,25 +24,19 @@ namespace ClassJournalProject.Models {
         public string Patronymic { get; set; }
 
         [Required]
+        [Phone]
         public string Phone { get; set; }
 
-        [Display(Name = "Full name")]
-        public string FullName => $"{Surname} {Name} {Patronymic}";
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
 
         [Required]
         [Display(Name = "Date of birth")]
-        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
 
         [Required]
-        [Display(Name = "Date of entry")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime DateOfEntry { get; set; }
-
-        [Required]
         public UserSex Sex { get; set; }
-
     }
 }
