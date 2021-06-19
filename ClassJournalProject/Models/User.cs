@@ -17,6 +17,10 @@ namespace ClassJournalProject.Models {
         public override string UserName { get; set; }
 
         [Required]
+        [Display(Name = "Phone")]
+        public override string PhoneNumber { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         [Required]

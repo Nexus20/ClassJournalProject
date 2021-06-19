@@ -31,6 +31,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Groups" asp-action="GroupsList">Groups</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="studentNavbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Students
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="studentNavbarDropdownMenuLink">
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Students" asp-action="StudentsList">Students list</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Students" asp-action="StudentsStatusesList">Student statuses</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Students" asp-action="StudentsEducationLevelsList">Student education levels</a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
