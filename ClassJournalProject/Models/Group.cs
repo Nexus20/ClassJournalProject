@@ -21,6 +21,8 @@ namespace ClassJournalProject.Models {
 
         public ICollection<Student> Students;
 
+        public int StudentsCount => Students.Count;
+
         public ICollection<Lesson> Lessons;
     }
 }
