@@ -10,30 +10,37 @@ namespace ClassJournalProject.Data {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+
         public DbSet<Specialty> Specialties { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
-        public DbSet<Student> Students { get; set; }
+        
         public DbSet<StudentAttendance> StudentAttendance { get; set; }
         public DbSet<StudentStatus> StudentStatuses { get; set; }
         public DbSet<StudentEducationLevel> StudentEducationLevels { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
+        
         public DbSet<SpecialtySubjectAssignment> SpecialtySubjectAssignments { get; set; }
         public DbSet<TeacherSubjectAssignment> TeacherSubjectAssignments { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder builder) {
+
+            //builder.Entity<User>().ToTable("Users");
 
             builder.Entity<Group>().ToTable("Groups");
             builder.Entity<Lesson>().ToTable("Lessons");
             builder.Entity<Specialty>().ToTable("Specialties");
             builder.Entity<SpecialtySubjectAssignment>().ToTable("SpecialtySubjectAssignments");
-            builder.Entity<Student>().ToTable("Students");
+            //builder.Entity<Student>().ToTable("Students");
             builder.Entity<StudentAttendance>().ToTable("StudentAttendance");
             builder.Entity<StudentEducationLevel>().ToTable("StudentEducationLevels");
             builder.Entity<StudentStatus>().ToTable("StudentStatuses");
             builder.Entity<Subject>().ToTable("Subjects");
-            builder.Entity<Teacher>().ToTable("Teachers");
+            //builder.Entity<Teacher>().ToTable("Teachers");
             builder.Entity<TeacherSubjectAssignment>().ToTable("TeacherSubjectAssignments");
 
             builder.Entity<SpecialtySubjectAssignment>()
@@ -63,11 +70,11 @@ namespace ClassJournalProject.Data {
                 .HasForeignKey(l => l.GroupId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //builder.Entity<Specialty>()
-            //    .HasMany(s => s.SpecialtySubjectAssignments)
-            //    .WithOne(ssa => ssa.Specialty)
-            //    .HasForeignKey(ssa => ssa.SpecialtyId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Specialty>()
+                .HasMany(s => s.SpecialtySubjectAssignments)
+                .WithOne(ssa => ssa.Specialty)
+                .HasForeignKey(ssa => ssa.SpecialtyId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<SpecialtySubjectAssignment>()
                 .HasOne(ssa => ssa.Specialty)

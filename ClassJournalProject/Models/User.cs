@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace ClassJournalProject.Models {
@@ -12,6 +13,10 @@ namespace ClassJournalProject.Models {
         }
 
         [Required]
+        [Display(Name="Login")]
+        public override string UserName { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         [Required]
@@ -19,9 +24,6 @@ namespace ClassJournalProject.Models {
 
         [Required]
         public string Patronymic { get; set; }
-
-        [Required]
-        public string Phone { get; set; }
 
         [Display(Name = "Full name")]
         public string FullName => $"{Surname} {Name} {Patronymic}";
@@ -40,6 +42,5 @@ namespace ClassJournalProject.Models {
 
         [Required]
         public UserSex Sex { get; set; }
-
     }
 }

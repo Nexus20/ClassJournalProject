@@ -9,10 +9,8 @@ namespace ClassJournalProject.Areas.Admin.Models.ViewModels {
 
     public class CreateTeacherViewModel {
 
-        public enum UserSex {
-            Male,
-            Female,
-        }
+        [Required]
+        public string Login { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -32,11 +30,22 @@ namespace ClassJournalProject.Areas.Admin.Models.ViewModels {
         public string Email { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required]
+        [Compare("Password", ErrorMessage = "Passwords don't match")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        public string PasswordConfirm { get; set; }
+
+        [Required]
         [Display(Name = "Date of birth")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
 
         [Required]
-        public UserSex Sex { get; set; }
+        public byte Sex { get; set; }
     }
 }
