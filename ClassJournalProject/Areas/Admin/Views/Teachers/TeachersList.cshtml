@@ -49,7 +49,8 @@
                 @Html.DisplayFor(modelItem => item.DateOfEntry)
             </td>
             <td>
-                <a asp-action="EditSubject" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="EditTeacher" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="AddRemoveSubjects" asp-route-id="@item.Id">Edit subject list</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>

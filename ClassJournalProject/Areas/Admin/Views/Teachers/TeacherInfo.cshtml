@@ -1,0 +1,24 @@
+﻿@model ClassJournalProject.Models.Teacher
+
+@{
+    ViewData["Title"] = "Teacher";
+}
+
+<h1>Teacher Info</h1>
+
+<div>
+    <h4>@Model.FullName</h4>
+    <hr />
+    <h4>Subjects</h4>
+    <hr />
+    <ul class="list-group">
+        @foreach (var subjectAssignment in Model.TeacherSubjectAssignments) {
+            <li class="list-group-item">@subjectAssignment.Subject.Name</li>
+        }
+    </ul>
+</div>
+<div>
+    <a asp-action="EditSpecialty" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="AddRemoveSubjects" asp-route-id="@Model.Id">Edit subject list</a> |
+    <a asp-action="TeachersList">Back to teacher list</a>
+</div>

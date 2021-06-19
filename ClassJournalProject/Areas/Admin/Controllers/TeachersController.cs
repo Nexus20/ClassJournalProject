@@ -36,6 +36,22 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
         }
 
         [HttpGet]
+        public async Task<IActionResult> TeacherInfo(string id) {
+
+            var teacher = await _context.Teachers
+                .Include(s => s.TeacherSubjectAssignments)
+                .ThenInclude(tsa => tsa.Subject)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (teacher == null) {
+                return NotFound();
+            }
+
+            return View(teacher);
+        }
+
+        [HttpGet]
         public IActionResult CreateTeacher() {
             return View();
         }
@@ -74,6 +90,74 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
 
             return View(model);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> AddRemoveSubjects(string id) {
+
+            if (id == null) {
+                return NotFound();
+            }
+
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(s => s.Id == id);
+
+            if (teacher == null) {
+                return NotFound();
+            }
+
+            ViewBag.Teacher = (Rank: teacher.Rank, Name: teacher.FullName);
+
+            var existingSubjects = _context.TeacherSubjectAssignments
+                .Include(ssa => ssa.Subject)
+                .Where(tsa => tsa.TeacherId == id)
+                .Select(tsa => tsa.Subject)
+                .AsNoTracking()
+                .ToList();
+
+
+            var nonExistingSubjects = _context.Subjects
+                .AsNoTracking()
+                .ToList()
+                .Except(existingSubjects)
+                .ToList();
+
+            var model = new Dictionary<string, List<Subject>> {
+                {"existingSubjects", existingSubjects}, {"nonExistingSubjects", nonExistingSubjects}
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddRemoveSubjects(string teacherId, int[] subjectsToAdd, int[] subjectsToRemove) {
+
+            if ((subjectsToAdd == null || subjectsToAdd.Length == 0) && (subjectsToRemove == null || subjectsToRemove.Length == 0)) {
+                return RedirectToAction(nameof(TeachersList));
+            }
+
+            if (subjectsToAdd != null) {
+                foreach (var subject in subjectsToAdd) {
+                    _context.TeacherSubjectAssignments.Add(new TeacherSubjectAssignment() { TeacherId = teacherId, SubjectId = subject });
+                }
+            }
+
+            if (subjectsToRemove != null) {
+
+                var teacherSubjectAssignmentsToRemove =
+                    new List<TeacherSubjectAssignment>();
+
+                foreach (var subjectToRemove in subjectsToRemove) {
+                    teacherSubjectAssignmentsToRemove.Add(_context.TeacherSubjectAssignments.Find(teacherId, subjectToRemove));
+                }
+
+                _context.RemoveRange(teacherSubjectAssignmentsToRemove);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(TeacherInfo), new { id = teacherId });
+        }
+
 
     }
 }
