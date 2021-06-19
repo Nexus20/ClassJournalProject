@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClassJournalProject.Areas.Admin.Models.ViewModels;
 using ClassJournalProject.Data;
 using ClassJournalProject.Models;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
+// TODO: Сделать связь студентов с группами как один к нулю
 
 namespace ClassJournalProject.Areas.Admin.Controllers {
 
@@ -49,25 +52,48 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
         [HttpGet]
         public IActionResult CreateStudent() {
 
-            ViewBag.SpecialtyId = new SelectList(_context.Specialties, "Id", "NameWithId");
-            ViewBag.CuratorId = new SelectList(_context.Teachers, "Id", "FullName");
+            ViewBag.StudentStatusId = new SelectList(_context.StudentStatuses, "Id", "Name");
+            ViewBag.StudentEducationLevelId = new SelectList(_context.StudentEducationLevels, "Id", "Name");
 
             return View();
         }
 
-        // POST: GroupsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateStudent([Bind("Id, Number, Year, SpecialtyId, CuratorId")] Group group) {
+        public async Task<IActionResult> CreateStudent(CreateStudentViewModel model) {
 
             if (ModelState.IsValid) {
-                _context.Add(group);
-                await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(StudentsList));
+                var student = new Student() {
+                    UserName = model.Login,
+                    Name = model.Name,
+                    Surname = model.Surname,
+                    Patronymic = model.Patronymic,
+                    PhoneNumber = model.Phone,
+                    Email = model.Email,
+                    DateOfBirth = model.DateOfBirth,
+                    DateOfEntry = DateTime.Now,
+                    Sex = (User.UserSex)model.Sex,
+                    EducationForm = (Student.StudentEducationForm)model.EducationForm,
+                    StudentStatusId = model.StudentStatusId,
+                    StudentEducationLevelId = model.StudentEducationLevelId
+                };
+
+                var result = await _userManager.CreateAsync(student, model.Password);
+
+                if (result.Succeeded) {
+                    await _userManager.AddToRoleAsync(student, "student");
+                    return RedirectToAction(nameof(StudentsList));
+                }
+                foreach (var error in result.Errors) {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
 
-            return View(group);
+            ViewBag.StudentStatusId = new SelectList(_context.StudentStatuses, "Id", "Name", model.StudentStatusId);
+            ViewBag.StudentEducationLevelId = new SelectList(_context.StudentEducationLevels, "Id", "Name", model.StudentEducationLevelId);
+
+            return View(model);
         }
 
         // GET: GroupsController/Edit/5
