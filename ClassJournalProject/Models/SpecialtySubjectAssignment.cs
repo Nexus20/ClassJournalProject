@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 namespace ClassJournalProject.Models {
     public class SpecialtySubjectAssignment {
 
-        public int Id { get; set; }
-
         public int SpecialtyId { get; set; }
         public Specialty Specialty { get; set; }
 

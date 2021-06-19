@@ -4,14 +4,16 @@ using ClassJournalProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClassJournalProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210619040300_MyTables")]
+    partial class MyTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,13 +32,9 @@ namespace ClassJournalProject.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SpecialtyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SpecialtyId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -46,8 +44,6 @@ namespace ClassJournalProject.Data.Migrations
                         .HasFilter("[CuratorId] IS NOT NULL");
 
                     b.HasIndex("SpecialtyId");
-
-                    b.HasIndex("SpecialtyId1");
 
                     b.ToTable("Groups");
                 });
@@ -65,9 +61,6 @@ namespace ClassJournalProject.Data.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("GroupId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -82,14 +75,11 @@ namespace ClassJournalProject.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Theme")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
-
-                    b.HasIndex("GroupId1");
 
                     b.HasIndex("TeacherSubjectAssignmentTeacherId", "TeacherSubjectAssignmentSubjectId");
 
@@ -183,7 +173,6 @@ namespace ClassJournalProject.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -419,12 +408,6 @@ namespace ClassJournalProject.Data.Migrations
                     b.Property<int>("EducationForm")
                         .HasColumnType("int");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GroupId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -449,10 +432,6 @@ namespace ClassJournalProject.Data.Migrations
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("GroupId1");
 
                     b.HasIndex("StudentEducationLevelId");
 
@@ -499,15 +478,11 @@ namespace ClassJournalProject.Data.Migrations
                         .WithOne("Group")
                         .HasForeignKey("ClassJournalProject.Models.Group", "CuratorId");
 
-                    b.HasOne("ClassJournalProject.Models.Specialty", null)
+                    b.HasOne("ClassJournalProject.Models.Specialty", "Specialty")
                         .WithMany("Groups")
                         .HasForeignKey("SpecialtyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ClassJournalProject.Models.Specialty", "Specialty")
-                        .WithMany()
-                        .HasForeignKey("SpecialtyId1");
 
                     b.Navigation("Curator");
 
@@ -516,15 +491,11 @@ namespace ClassJournalProject.Data.Migrations
 
             modelBuilder.Entity("ClassJournalProject.Models.Lesson", b =>
                 {
-                    b.HasOne("ClassJournalProject.Models.Group", null)
-                        .WithMany("Lessons")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("ClassJournalProject.Models.Group", "Group")
                         .WithMany()
-                        .HasForeignKey("GroupId1");
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ClassJournalProject.Models.TeacherSubjectAssignment", "TeacherSubjectAssignment")
                         .WithMany()
@@ -542,13 +513,13 @@ namespace ClassJournalProject.Data.Migrations
                     b.HasOne("ClassJournalProject.Models.Specialty", "Specialty")
                         .WithMany("SpecialtySubjectAssignments")
                         .HasForeignKey("SpecialtyId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ClassJournalProject.Models.Subject", "Subject")
                         .WithMany("SpecialtySubjectAssignments")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Specialty");
@@ -578,15 +549,15 @@ namespace ClassJournalProject.Data.Migrations
             modelBuilder.Entity("ClassJournalProject.Models.TeacherSubjectAssignment", b =>
                 {
                     b.HasOne("ClassJournalProject.Models.Subject", "Subject")
-                        .WithMany("TeacherSubjectAssignments")
+                        .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ClassJournalProject.Models.Teacher", "Teacher")
                         .WithMany("TeacherSubjectAssignments")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Subject");
@@ -647,16 +618,6 @@ namespace ClassJournalProject.Data.Migrations
 
             modelBuilder.Entity("ClassJournalProject.Models.Student", b =>
                 {
-                    b.HasOne("ClassJournalProject.Models.Group", null)
-                        .WithMany("Students")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ClassJournalProject.Models.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId1");
-
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithOne()
                         .HasForeignKey("ClassJournalProject.Models.Student", "Id")
@@ -677,8 +638,6 @@ namespace ClassJournalProject.Data.Migrations
 
                     b.Navigation("EducationLevel");
 
-                    b.Navigation("Group");
-
                     b.Navigation("StudentStatus");
                 });
 
@@ -691,13 +650,6 @@ namespace ClassJournalProject.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ClassJournalProject.Models.Group", b =>
-                {
-                    b.Navigation("Lessons");
-
-                    b.Navigation("Students");
-                });
-
             modelBuilder.Entity("ClassJournalProject.Models.Specialty", b =>
                 {
                     b.Navigation("Groups");
@@ -708,8 +660,6 @@ namespace ClassJournalProject.Data.Migrations
             modelBuilder.Entity("ClassJournalProject.Models.Subject", b =>
                 {
                     b.Navigation("SpecialtySubjectAssignments");
-
-                    b.Navigation("TeacherSubjectAssignments");
                 });
 
             modelBuilder.Entity("ClassJournalProject.Models.Teacher", b =>
