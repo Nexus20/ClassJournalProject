@@ -131,6 +131,40 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
         }
 
         [HttpGet]
+        public async Task<IActionResult> EditSubject(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+
+            var subject = await _context.Subjects.FirstOrDefaultAsync(s => s.Id == id);
+
+            if (subject == null) {
+                return NotFound();
+            }
+
+            return View(subject);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSubject(int id, [Bind("Id, Name")] Subject subject) {
+
+            if (ModelState.IsValid) {
+                try {
+                    _context.Update(subject);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException) {
+                    // TODO
+                }
+
+                return RedirectToAction(nameof(SubjectsList));
+            }
+
+            return View(subject);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AddRemoveSubjects(int? id) {
 
             if (id == null) {
