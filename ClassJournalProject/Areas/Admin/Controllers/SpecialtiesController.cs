@@ -32,6 +32,22 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
         }
 
         [HttpGet]
+        public async Task<IActionResult> SpecialtyInfo(int? id) {
+
+            var specialty = await _context.Specialties
+                .Include(s => s.SpecialtySubjectAssignments)
+                    .ThenInclude(ssa => ssa.Subject)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (specialty == null) {
+                return NotFound();
+            }
+
+            return View(specialty);
+        }
+
+        [HttpGet]
         public IActionResult CreateSpecialty() {
             return View();
         }
