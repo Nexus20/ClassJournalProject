@@ -67,6 +67,41 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
         }
 
         [HttpGet]
+        public async Task<IActionResult> EditSpecialty(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+
+            var specialty = await _context.Specialties.FirstOrDefaultAsync(s => s.Id == id);
+
+            if (specialty == null) {
+                return NotFound();
+            }
+
+            return View(specialty);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSpecialty(int id, [Bind("Id, Name")] Specialty specialty) {
+
+            if (ModelState.IsValid) {
+                try {
+                    _context.Update(specialty);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException) {
+                    // TODO
+                }
+
+                return RedirectToAction(nameof(SpecialtiesList));
+            }
+
+            return View(specialty);
+        }
+
+
+        [HttpGet]
         public async Task<IActionResult> SubjectsList() {
 
             var subjects = await _context.Subjects
