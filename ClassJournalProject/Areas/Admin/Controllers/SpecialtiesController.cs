@@ -96,7 +96,7 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddSubjects(int? id) {
+        public async Task<IActionResult> AddRemoveSubjects(int? id) {
 
             if (id == null) {
                 return NotFound();
@@ -112,29 +112,58 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
             // TODO: разобраться почему не работают анонимные типы при обращении к их полям во View
             ViewBag.Specialty = (Id: specialty.Id, Name: specialty.Name);
 
-            var subjects = await _context.Subjects
+            var existingSubjects = _context.SpecialtySubjectAssignments
+                .Include(ssa => ssa.Subject)
+                .Where(ssa => ssa.SpecialtyId == id)
+                .Select(ssa => ssa.Subject)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToList();
 
-            return View(subjects);
+
+            var nonExistingSubjects = _context.Subjects
+                .AsNoTracking()
+                .ToList()
+                .Except(existingSubjects)
+                .ToList();
+
+            var model = new Dictionary<string, List<Subject>> {
+                {"existingSubjects", existingSubjects}, {"nonExistingSubjects", nonExistingSubjects}
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSubjects(int specialtyId, int[] subjects) {
+        public async Task<IActionResult> AddRemoveSubjects(int specialtyId, int[] subjectsToAdd, int[] subjectsToRemove) {
 
-            if (subjects == null || subjects.Length == 0) {
+            if ((subjectsToAdd == null || subjectsToAdd.Length == 0) && (subjectsToRemove == null || subjectsToRemove.Length == 0)) {
                 return RedirectToAction(nameof(SpecialtiesList));
             }
 
-            foreach (var subject in subjects) {
-                _context.SpecialtySubjectAssignments.Add(new SpecialtySubjectAssignment()
-                    {SpecialtyId = specialtyId, SubjectId = subject});
+            if (subjectsToAdd != null) {
+                foreach (var subject in subjectsToAdd) {
+                    _context.SpecialtySubjectAssignments.Add(new SpecialtySubjectAssignment()
+                        {SpecialtyId = specialtyId, SubjectId = subject});
+                }
+            }
+
+            if (subjectsToRemove != null) {
+
+                var specialtySubjectAssignmentsToRemove =
+                    new List<SpecialtySubjectAssignment>();
+
+                foreach (var subjectToRemove in subjectsToRemove) {
+                    specialtySubjectAssignmentsToRemove.Add(_context.SpecialtySubjectAssignments.Find(specialtyId, subjectToRemove));
+                }
+
+                _context.RemoveRange(specialtySubjectAssignmentsToRemove);
+
+                //_context.SpecialtySubjectAssignments.Where(ssa => ssa.SpecialtyId == specialtyId)
             }
 
             await _context.SaveChangesAsync();
 
-
-            return RedirectToAction(nameof(SpecialtiesList));
+            return RedirectToAction(nameof(SpecialtyInfo), new {id = specialtyId});
         }
 
 
