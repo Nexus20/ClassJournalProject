@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClassJournalProject.Data;
+using ClassJournalProject.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassJournalProject.Areas.Admin.Controllers {
@@ -37,25 +39,34 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
         }
 
         // GET: GroupsController/Details/5
-        public ActionResult Details(int id) {
+        [HttpGet]
+        public IActionResult Details(int id) {
             return View();
         }
 
         // GET: GroupsController/Create
-        public ActionResult Create() {
+        [HttpGet]
+        public IActionResult CreateGroup() {
+
+            ViewBag.SpecialtyId = new SelectList(_context.Specialties, "Id", "NameWithId");
+            ViewBag.CuratorId = new SelectList(_context.Teachers, "Id", "FullName");
+
             return View();
         }
 
         // POST: GroupsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection) {
-            try {
-                return RedirectToAction(nameof(Index));
+        public async Task<IActionResult> CreateGroup([Bind("Id, Number, Year, SpecialtyId, CuratorId")] Group group) {
+
+            if (ModelState.IsValid) {
+                _context.Add(group);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(GroupsList));
             }
-            catch {
-                return View();
-            }
+
+            return View(group);
         }
 
         // GET: GroupsController/Edit/5

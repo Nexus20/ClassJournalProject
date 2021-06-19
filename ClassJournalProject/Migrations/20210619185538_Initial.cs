@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ClassJournalProject.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -184,9 +184,9 @@ namespace ClassJournalProject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
                     SpecialtyId = table.Column<int>(type: "int", nullable: false),
-                    SpecialtyId1 = table.Column<int>(type: "int", nullable: true),
                     CuratorId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -195,12 +195,6 @@ namespace ClassJournalProject.Migrations
                     table.ForeignKey(
                         name: "FK_Groups_Specialties_SpecialtyId",
                         column: x => x.SpecialtyId,
-                        principalTable: "Specialties",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Groups_Specialties_SpecialtyId1",
-                        column: x => x.SpecialtyId1,
                         principalTable: "Specialties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -302,7 +296,6 @@ namespace ClassJournalProject.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
-                    GroupId1 = table.Column<int>(type: "int", nullable: true),
                     TeacherSubjectAssignmentId = table.Column<int>(type: "int", nullable: false),
                     TeacherSubjectAssignmentTeacherId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TeacherSubjectAssignmentSubjectId = table.Column<int>(type: "int", nullable: false)
@@ -313,12 +306,6 @@ namespace ClassJournalProject.Migrations
                     table.ForeignKey(
                         name: "FK_Lessons_Groups_GroupId",
                         column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Lessons_Groups_GroupId1",
-                        column: x => x.GroupId1,
                         principalTable: "Groups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -427,19 +414,9 @@ namespace ClassJournalProject.Migrations
                 column: "SpecialtyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_SpecialtyId1",
-                table: "Groups",
-                column: "SpecialtyId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Lessons_GroupId",
                 table: "Lessons",
                 column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lessons_GroupId1",
-                table: "Lessons",
-                column: "GroupId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lessons_TeacherSubjectAssignmentTeacherId_TeacherSubjectAssignmentSubjectId",

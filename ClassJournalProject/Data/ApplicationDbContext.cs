@@ -52,16 +52,16 @@ namespace ClassJournalProject.Data {
             builder.Entity<StudentAttendance>()
                 .HasKey(s => new { s.StudentId, s.LessonId });
 
-            builder.Entity<Specialty>()
-                .HasMany(s => s.Groups)
-                .WithOne()
-                .HasForeignKey(g => g.SpecialtyId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             builder.Entity<Group>()
                 .HasMany(g => g.Students)
                 .WithOne()
                 .HasForeignKey(s => s.GroupId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Group>()
+                .HasOne(g => g.Specialty)
+                .WithMany(s => s.Groups)
+                .HasForeignKey(g => g.SpecialtyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Group>()
@@ -98,6 +98,12 @@ namespace ClassJournalProject.Data {
                 .HasOne(tsa => tsa.Subject)
                 .WithMany(t => t.TeacherSubjectAssignments)
                 .HasForeignKey(tsa => tsa.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Lesson>()
+                .HasOne(l => l.Group)
+                .WithMany(g => g.Lessons)
+                .HasForeignKey(l => l.GroupId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

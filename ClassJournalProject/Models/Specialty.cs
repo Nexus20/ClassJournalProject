@@ -14,6 +14,8 @@ namespace ClassJournalProject.Models {
         [Required]
         public string Name { get; set; }
 
+        public string NameWithId => $"{Id} {Name}";
+
         public ICollection<Group> Groups { get; set; }
 
         public ICollection<SpecialtySubjectAssignment> SpecialtySubjectAssignments { get; set; }

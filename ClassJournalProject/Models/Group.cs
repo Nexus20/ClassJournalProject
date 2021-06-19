@@ -10,18 +10,24 @@ namespace ClassJournalProject.Models {
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public int Number { get; set; }
 
         [Required]
+        public ushort Year { get; set; }
+
+        [Required]
+        [Display(Name = "Specialty")]
         public int SpecialtyId { get; set; }
         public Specialty Specialty { get; set; }
 
+        [Display(Name = "Curator")]
         public string CuratorId { get; set; }
         public Teacher Curator { get; set; }
 
         public ICollection<Student> Students;
 
-        public int StudentsCount => Students.Count;
+        [Display(Name = "Students")]
+        public int StudentsCount => Lessons?.Count ?? 0;
 
         public ICollection<Lesson> Lessons;
     }

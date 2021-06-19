@@ -31,7 +31,7 @@ namespace ClassJournalProject {
                     var context = services.GetRequiredService<ApplicationDbContext>();
                     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    //DbInitializer.Initialize(context);
+                    DbInitializer.Initialize(context);
                     await DbInitializer.InitializeRolesAsync(userManager, rolesManager);
                 }
                 catch (Exception ex) {

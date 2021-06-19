@@ -29,14 +29,13 @@ namespace ClassJournalProject.Migrations
                     b.Property<string>("CuratorId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.Property<int>("SpecialtyId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SpecialtyId1")
+                    b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -46,8 +45,6 @@ namespace ClassJournalProject.Migrations
                         .HasFilter("[CuratorId] IS NOT NULL");
 
                     b.HasIndex("SpecialtyId");
-
-                    b.HasIndex("SpecialtyId1");
 
                     b.ToTable("Groups");
                 });
@@ -63,9 +60,6 @@ namespace ClassJournalProject.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GroupId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -88,8 +82,6 @@ namespace ClassJournalProject.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
-
-                    b.HasIndex("GroupId1");
 
                     b.HasIndex("TeacherSubjectAssignmentTeacherId", "TeacherSubjectAssignmentSubjectId");
 
@@ -482,15 +474,11 @@ namespace ClassJournalProject.Migrations
                         .WithOne("Group")
                         .HasForeignKey("ClassJournalProject.Models.Group", "CuratorId");
 
-                    b.HasOne("ClassJournalProject.Models.Specialty", null)
+                    b.HasOne("ClassJournalProject.Models.Specialty", "Specialty")
                         .WithMany("Groups")
                         .HasForeignKey("SpecialtyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("ClassJournalProject.Models.Specialty", "Specialty")
-                        .WithMany()
-                        .HasForeignKey("SpecialtyId1");
 
                     b.Navigation("Curator");
 
@@ -499,15 +487,11 @@ namespace ClassJournalProject.Migrations
 
             modelBuilder.Entity("ClassJournalProject.Models.Lesson", b =>
                 {
-                    b.HasOne("ClassJournalProject.Models.Group", null)
+                    b.HasOne("ClassJournalProject.Models.Group", "Group")
                         .WithMany("Lessons")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("ClassJournalProject.Models.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId1");
 
                     b.HasOne("ClassJournalProject.Models.TeacherSubjectAssignment", "TeacherSubjectAssignment")
                         .WithMany()
