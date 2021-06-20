@@ -102,5 +102,27 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
                 return View();
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AssignStudents(int? id) {
+
+            if (id == null) {
+                return NotFound();
+            }
+
+            var group = await _context.Groups
+                .Include(g => g.Specialty)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
+            if (group == null) {
+                return NotFound();
+            }
+
+            ViewBag.Group = group;
+
+            var students = await _context.Students.ToListAsync();
+
+            return View(students);
+        }
     }
 }
