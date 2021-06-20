@@ -87,6 +87,29 @@ namespace ClassJournalProject.Data {
             }
 
             context.SaveChanges();
+
+            var studentStatuses = new StudentStatus[] {
+                new() {Name = "learns"},
+                new() {Name = "transferred"},
+                new() {Name = "deducted"},
+            };
+
+            foreach (var studentStatus in studentStatuses) {
+                context.StudentStatuses.Add(studentStatus);
+            }
+
+            context.SaveChanges();
+
+            var studentEducationLevels = new StudentEducationLevel[] {
+                new() {Name = "bachelor"},
+                new() {Name = "master"},
+            };
+
+            foreach (var studentEducationLevel in studentEducationLevels) {
+                context.StudentEducationLevels.Add(studentEducationLevel);
+            }
+
+            context.SaveChanges();
         }
 
 

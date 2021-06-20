@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassJournalProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210619185538_Initial")]
+    [Migration("20210620183052_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -437,10 +437,7 @@ namespace ClassJournalProject.Migrations
                     b.Property<int>("EducationForm")
                         .HasColumnType("int");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GroupId1")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentEducationLevelId")
@@ -450,8 +447,6 @@ namespace ClassJournalProject.Migrations
                         .HasColumnType("int");
 
                     b.HasIndex("GroupId");
-
-                    b.HasIndex("GroupId1");
 
                     b.HasIndex("StudentEducationLevelId");
 
@@ -616,15 +611,10 @@ namespace ClassJournalProject.Migrations
 
             modelBuilder.Entity("ClassJournalProject.Models.Student", b =>
                 {
-                    b.HasOne("ClassJournalProject.Models.Group", null)
+                    b.HasOne("ClassJournalProject.Models.Group", "Group")
                         .WithMany("Students")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ClassJournalProject.Models.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId1");
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ClassJournalProject.Models.StudentEducationLevel", "EducationLevel")
                         .WithMany()

@@ -12,13 +12,13 @@ namespace ClassJournalProject.Models {
             Female,
         }
 
-        [Required]
-        [Display(Name="Login")]
-        public override string UserName { get; set; }
+        //[Required]
+        //[Display(Name="Login")]
+        //public string UserName { get; set; }
 
-        [Required]
-        [Display(Name = "Phone")]
-        public override string PhoneNumber { get; set; }
+        //[Required]
+        //[Display(Name = "Phone")]
+        //public string PhoneNumber { get; set; }
 
         [Required]
         public string Name { get; set; }

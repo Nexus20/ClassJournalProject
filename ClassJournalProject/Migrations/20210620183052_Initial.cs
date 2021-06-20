@@ -214,7 +214,6 @@ namespace ClassJournalProject.Migrations
                     Sex = table.Column<int>(type: "int", nullable: true),
                     EducationForm = table.Column<int>(type: "int", nullable: true),
                     GroupId = table.Column<int>(type: "int", nullable: true),
-                    GroupId1 = table.Column<int>(type: "int", nullable: true),
                     StudentEducationLevelId = table.Column<int>(type: "int", nullable: true),
                     StudentStatusId = table.Column<int>(type: "int", nullable: true),
                     Rank = table.Column<int>(type: "int", nullable: true),
@@ -239,12 +238,6 @@ namespace ClassJournalProject.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Groups_GroupId",
                         column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Groups_GroupId1",
-                        column: x => x.GroupId1,
                         principalTable: "Groups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -378,11 +371,6 @@ namespace ClassJournalProject.Migrations
                 name: "IX_AspNetUsers_GroupId",
                 table: "AspNetUsers",
                 column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_GroupId1",
-                table: "AspNetUsers",
-                column: "GroupId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_StudentEducationLevelId",
