@@ -16,7 +16,7 @@
 
             @foreach (var item in Model) {
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="student-@item.Id" value="@item.Id" name="students">
+                    <input type="checkbox" class="form-check-input" id="student-@item.Id" value="@item.Id" name="studentsIds">
                     <label class="form-check-label" for="student-@item.Id">@item.FullName</label>
                 </div>
             }

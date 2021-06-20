@@ -30,6 +30,7 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
         public async Task<IActionResult> GroupsList() {
 
             var groups = await _context.Groups
+                .Include(g => g.Students)
                 .Include(g => g.Specialty)
                 .Include(g => g.Curator)
                 .AsNoTracking()
@@ -40,8 +41,26 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
 
         // GET: GroupsController/Details/5
         [HttpGet]
-        public IActionResult Details(int id) {
-            return View();
+        public async Task<IActionResult> GroupInfo(int? id) {
+
+            if (id == null) {
+                return NotFound();
+            }
+
+            var group = await _context.Groups
+                .Include(g => g.Students)
+                    .ThenInclude(s => s.EducationLevel)
+                .Include(g => g.Students)
+                    .ThenInclude(s => s.StudentStatus)
+                .Include(g => g.Specialty)
+                .Include(g => g.Curator)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
+            if (group == null) {
+                return NotFound();
+            }
+
+            return View(group);
         }
 
         // GET: GroupsController/Create
@@ -123,6 +142,28 @@ namespace ClassJournalProject.Areas.Admin.Controllers {
             var students = await _context.Students.ToListAsync();
 
             return View(students);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignStudents(int groupId, string[] studentsIds) {
+
+            if (studentsIds == null || studentsIds.Length == 0) {
+                return RedirectToAction(nameof(GroupsList));
+            }
+
+            var studentsToAssign = from student in _context.Students
+                                                    where studentsIds.Contains(student.Id)
+                                                    select student;
+
+            foreach (var studentToAssign in studentsToAssign) {
+                studentToAssign.GroupId = groupId;
+            }
+
+            _context.Students.UpdateRange(studentsToAssign);
+            await _context.SaveChangesAsync();
+
+            //return RedirectToAction(nameof(GroupInfo), new {id = groupId});
+            return RedirectToAction(nameof(GroupsList));
         }
     }
 }

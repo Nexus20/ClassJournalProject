@@ -24,7 +24,7 @@ namespace ClassJournalProject.Models {
         public ICollection<Student> Students;
 
         [Display(Name = "Students")]
-        public int StudentsCount => Lessons?.Count ?? 0;
+        public int StudentsCount => Students?.Count ?? 0;
 
         public ICollection<Lesson> Lessons;
     }
