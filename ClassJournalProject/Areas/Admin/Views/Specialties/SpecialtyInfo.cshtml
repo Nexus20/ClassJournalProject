@@ -1,0 +1,32 @@
+﻿@model ClassJournalProject.Models.Specialty
+
+@{
+    ViewData["Title"] = "SpecialtyInfo";
+}
+
+<h1>Specialty Info</h1>
+
+<div>
+    <h4>Specialty</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    <h4>Subjects</h4>
+    <hr />
+    <ul class="list-group">
+        @foreach (var subjectAssignment in Model.SpecialtySubjectAssignments) {
+            <li class="list-group-item">@subjectAssignment.Subject.Name</li>
+        }
+    </ul>
+</div>
+<div>
+    <a asp-action="EditSpecialty" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="AddRemoveSubjects" asp-route-id="@Model.Id">Edit subject list</a> |
+    <a asp-action="SpecialtiesList">Back to specialty list</a>
+</div>

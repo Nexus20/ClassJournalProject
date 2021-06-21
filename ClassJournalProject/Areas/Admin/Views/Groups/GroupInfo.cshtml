@@ -1,0 +1,102 @@
+﻿@model ClassJournalProject.Models.Group
+
+@{
+    ViewData["Title"] = "GroupInfo";
+}
+
+<h1>Group @Model.Specialty.Name-@Model.Year-@Model.Number info</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Curator)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Curator != null) {
+                @Html.DisplayFor(model => model.Curator.FullName)
+            }
+            else {
+                @Html.Raw("A curator has not yet been assigned for this group")
+            }
+        </dd>
+    </dl>
+</div>
+
+<h2>Students</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.UserName)*@
+                Login
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Students.First().FullName)*@
+                Full name
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.PhoneNumber)*@
+                Phone
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Date of birth
+            </th>
+            <th>
+                Date of entry
+            </th>
+            <th>
+                Education level
+            </th>
+            <th>
+                Status
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Students) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfEntry)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EducationLevel.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentStatus.Name)
+                </td>
+                <td>
+                    <a asp-action="EditStudent" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="GroupsList">Back to groups list</a>
+</div>

@@ -1,0 +1,48 @@
+﻿@model ClassJournalProject.Models.Group
+
+@{
+    ViewData["Title"] = "CreateGroup";
+}
+
+<h1>CreateGroup</h1>
+
+<h4>Group</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateGroup">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Number" class="control-label"></label>
+                <input asp-for="Number" class="form-control" />
+                <span asp-validation-for="Number" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpecialtyId" class="control-label"></label>
+                <select asp-for="SpecialtyId" class="form-control" asp-items="ViewBag.SpecialtyId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CuratorId" class="control-label"></label>
+                <select asp-for="CuratorId" class="form-control" asp-items="ViewBag.CuratorId">
+                    <option value=""></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="GroupsList">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
