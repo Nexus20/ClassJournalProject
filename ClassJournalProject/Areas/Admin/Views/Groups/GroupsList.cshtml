@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ClassJournalProject.Models.Group>
+
+@{
+    ViewData["Title"] = "GroupsList";
+}
+
+<h1>Groups</h1>
+
+<p>
+    <a asp-action="CreateGroup">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Group
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Curator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StudentsCount)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Specialty.Name-@item.Year-@item.Number
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Curator.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentsCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="GroupInfo" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="AssignStudents" asp-route-id="@item.Id">Assign students</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

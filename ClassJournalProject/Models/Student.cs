@@ -11,7 +11,7 @@ namespace ClassJournalProject.Models {
         [Required]
         public StudentEducationForm EducationForm { get; set; }
 
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
         public Group Group { get; set; }
 
         [Required]

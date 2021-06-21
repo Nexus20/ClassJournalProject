@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using ClassJournalProject.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace ClassJournalProject.Data {
 
@@ -33,6 +34,82 @@ namespace ClassJournalProject.Data {
                     await userManager.AddToRoleAsync(admin, "admin");
                 }
             }
+        }
+
+        public static void Initialize(ApplicationDbContext context) {
+
+            context.Database.EnsureCreated();
+
+            if (context.Specialties.Any()) {
+                return;
+            }
+
+            var specialties = new Specialty[] {
+                new() {Id = 121, Name = "IPZ"},
+                new() {Id = 122, Name = "KN"},
+                new() {Id = 123, Name = "KIU"},
+            };
+
+            foreach (var specialty in specialties) {
+                context.Specialties.Add(specialty);
+            }
+
+            context.SaveChanges();
+
+            var subjects = new Subject[] {
+                new() {Name = "Maths"},
+                new() {Name = "Physics"},
+                new() {Name = "C++"},
+                new() {Name = "Java"},
+                new() {Name = "PHP"},
+                new() {Name = "JS"},
+                new() {Name = "Hypertext and hypermedia"},
+                new() {Name = "Algorithms and data structures"},
+                new() {Name = "English"},
+            };
+
+            foreach (var subject in subjects) {
+                context.Subjects.Add(subject);
+            }
+
+            context.SaveChanges();
+
+            var groups = new Group[] {
+                new() {Number = 1, SpecialtyId = 121, Year = 2020},
+                new() {Number = 1, SpecialtyId = 121, Year = 2020},
+                new() {Number = 2, SpecialtyId = 122, Year = 2020},
+                new() {Number = 2, SpecialtyId = 122, Year = 2020},
+                new() {Number = 1, SpecialtyId = 123, Year = 2020},
+            };
+
+            foreach (var group in groups) {
+                context.Groups.Add(group);
+            }
+
+            context.SaveChanges();
+
+            var studentStatuses = new StudentStatus[] {
+                new() {Name = "learns"},
+                new() {Name = "transferred"},
+                new() {Name = "deducted"},
+            };
+
+            foreach (var studentStatus in studentStatuses) {
+                context.StudentStatuses.Add(studentStatus);
+            }
+
+            context.SaveChanges();
+
+            var studentEducationLevels = new StudentEducationLevel[] {
+                new() {Name = "bachelor"},
+                new() {Name = "master"},
+            };
+
+            foreach (var studentEducationLevel in studentEducationLevels) {
+                context.StudentEducationLevels.Add(studentEducationLevel);
+            }
+
+            context.SaveChanges();
         }
 
 
